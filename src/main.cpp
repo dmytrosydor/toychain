@@ -1,21 +1,25 @@
-#include "block.h"
+#include "blockchain.h"
 #include <iostream>
 
 int main() {
-  Block block(1, "Alice paying bobe 10 niggers", "0000abc");
+  Blockchain chain;
+  chain.add_block("Аліса -> Боб: 10");
+  chain.add_block("Боб -> Карл: 5");
+  chain.add_block("Карл -> Аліса: 2");
+  chain.print();
+  std::cout << "Ланцюг валідний? " << (chain.is_valid() ? "так" : "НІ")
+            << "\n\n";
+  // Атака 1: змінюємо дані в середині ланцюга.
+  std::cout << "Підробляємо блок 1...\n";
+  chain.blocks[1].data = "Аліса -> Боб: 1000";
+  std::cout << "Ланцюг валідний? " << (chain.is_valid() ? "- Так" : " - НІ")
+            << "\n\n";
+  // Атака 2: перераховуємо hash підробленого блоку, щоб "замести сліди".
+  std::cout << "Перераховуємо hash блоку 1...\n";
+  chain.blocks[1].hash = chain.blocks[1].calculate_hash();
+  std::cout << "Ланцюг валідний? " << (chain.is_valid() ? "так" : " - НІ")
+            << "\n";
 
-  std::cout << "Index: " << block.index << std::endl;
-  std::cout << "Timestamp: " << block.timestamp << std::endl;
-  std::cout << "Data: " << block.data << std::endl;
-  std::cout << "Prev_hash: " << block.prev_hash << std::endl;
-  std::cout << "hash: " << block.hash << std::endl;
-
-  block.data = "Alice paying bobe 10 nigger";
-  std::cout << std::endl << "New Data: " << block.data << std::endl;
-  std::cout << "Old Hash: " << block.hash << std::endl; // old hash
-  std::cout << "New hash: " << block.calculate_hash() << std::endl;
-  std::cout << (block.hash == block.calculate_hash() ? "SAME" : "Fake Nigga")
-            << std::endl;
-
+  std::cout << "Blocks in chain: " << chain.lenght() << std::endl;
   return 0;
 }
