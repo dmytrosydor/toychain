@@ -1,0 +1,7 @@
+toychain
+src/main
+*.o
+*.out
+*.exe
+
+.DS_Store
