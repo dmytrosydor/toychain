@@ -1,4 +1,5 @@
 #pragma once
+#include "wallet.h"
 #include <string>
 
 struct Transaction {
@@ -12,4 +13,9 @@ struct Transaction {
 
   // Хеш транзакції - її унікальний ідентифікатор
   std::string hash() const;
+
+
+  void sign(const Wallet& wallet);
+
+  bool is_valid() const;
 };
